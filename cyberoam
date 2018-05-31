@@ -1,6 +1,6 @@
 #######################
 # Cyberoam Web Access URL
-link="https://172.16.68.6:8090/corporate/servlet/CyberoamHTTPClient"
+link="https://192.168.1.1:8090/login.xml"
 
 ########################
 # Constant Hidden Form Fields 
@@ -8,6 +8,8 @@ isAccessDenied=""
 url=""
 message=""
 saveinfo="saveinfo"
+timestamp="$(date +%s)"
+producttype="0"
 
 ########################
 # Variable Hidden Form Fields
@@ -30,7 +32,7 @@ then
 	then
 		exit
 	else
-		curl $link --data username="$username" --data password="$password" --data mode="$mode" --data btnSubmit="$btnSubmit" --data isAccessDenied="$isAccessDenied" --data url="$url" --data message="$message" --data saveinfo="$saveinfo" -k &> ~/.cyberoam-log.tmp
+		curl $link --data username="$username" --data password="$password" --data a="$timestamp" --data producttype="$producttype" --data mode="$mode" --data btnSubmit="$btnSubmit" --data isAccessDenied="$isAccessDenied" --data url="$url" --data message="$message" --data saveinfo="$saveinfo" -k &> ~/.cyberoam-log.tmp
 		
 		if grep "logoutstatus=true" ~/.cyberoam-log.tmp > /dev/null
 		then
@@ -72,6 +74,7 @@ fi
 #######################
 # Using CLI cURL to send post data to login Cyberoam
 curl $link --data username="$username" --data password="$password" \
+--data a="$timestamp" --data producttype="$producttype" \
 --data mode="$mode" --data btnSubmit="$btnSubmit" \
 --data isAccessDenied="$isAccessDenied" --data url="$url" --data message="$message" --data saveinfo="$saveinfo" \
 -k &> ~/.cyberoam-log.tmp
@@ -81,6 +84,7 @@ cnt=0
 while grep "loginstatus=false" ~/.cyberoam-log.tmp > /dev/null
 do
 	curl $link --data username="$username" --data password="$password" \
+--data a="$timestamp" --data producttype="$producttype" \
 --data mode="$mode" --data btnSubmit="$btnSubmit" \
 --data isAccessDenied="$isAccessDenied" --data url="$url" --data message="$message" --data saveinfo="$saveinfo" \
 -k &> ~/.cyberoam-log.tmp
@@ -119,3 +123,5 @@ fi
 # Written by Vaidik Kapoor
 # www.vaidikkapoor.info
 # twitter.com/vaidikkapoor
+# Updated by Shashank Kumar | realslimshanky
+# shanky.xyz
